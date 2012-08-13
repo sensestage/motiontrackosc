@@ -7,7 +7,7 @@ import re
 import tarfile
 
 PACKAGE = 'MotionTrackOSC'
-VERSION = '0.2a'
+VERSION = '0.3'
 
 ################ FUNCTIONS ##################
 def dist_paths():
