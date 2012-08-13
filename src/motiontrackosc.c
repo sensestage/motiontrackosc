@@ -439,7 +439,7 @@ int main(int argc, char** argv)
     lo_server_thread_add_method(st, "/motiontrack/prediction", "f", prediction_handler, NULL);
     lo_server_thread_add_method(st, "/motiontrack/threshold", "f", threshold_handler, NULL);
     lo_server_thread_add_method(st, "/motiontrack/difference", "i", diff_threshold_handler, NULL);
-	lo_server_thread_add_method(st, "/motiontrack/maxarea", "i", max_area_handler, NULL);
+    lo_server_thread_add_method(st, "/motiontrack/maxarea", "i", max_area_handler, NULL);
     lo_server_thread_add_method(st, "/motiontrack/info", "", info_handler, NULL);
 
     lo_server_thread_add_method(st, "/motiontrack/subscribe/position", "i", subscribe_pos_handler, NULL);
