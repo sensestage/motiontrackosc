@@ -1,0 +1,151 @@
+=================  MotionTrackOSC  =================
+=========== (c) 2009 - Marije Baalman ==============
+================== www.nescivi.nl ==================
+
+MotionTrackOSC is a small program that does motiontracking
+ on either a camera image or a video file.
+The tracked motion is output to a client via osc.
+
+The program is based on the libraries
+OpenCV - http://opencv.willowgarage.com
+liblo  - http://liblo.sourceforge.net
+
+I wrote the program using opencv v1.1pre1 on Linux, though
+ maybe an earlier version of OpenCV (such as shipped with
+ Debian or other distributions) will also work.
+I did NOT yet use the newest version of liblo (v0.25 or
+ higher), since that is not shipped with Debian unstable
+ yet (even though it has a really nice feature).
+
+
+================== Build ================
+
+To build the application you need scons.
+
+You build it by doing:
+
+scons
+(sudo) scons install
+
+You can add a PREFIX to define the location for installation of the binary application
+ The default is (/usr/local/).
+
+
+Installing the SuperCollider files:
+
+scons SC
+installs the files to ~/share/SuperCollider/Extensions/MotionTrackOSC
+
+(sudo) scons SC SCPATH=/usr/local/share/SuperCollider/Extensions
+installs the files to /usr/local/share/SuperCollider/Extensions/MotionTrackOSC
+
+On OSX [1] for a local install you would do:
+scons SCPATH="~/Library/Application\ Support/SuperCollider/Extensions"
+
+See also below for a note on OSX 10.6.
+
+================== Startup ================
+
+motiontracker <device or file> <target_port> <recv_port> <target_ip>
+
+The defaults are:
+
+device 0
+target_port 57120 (to send to)
+recv_port   57151 (to listen on)
+target_ip   "127.0.0.1"
+
+Devices are indicated using a single digit number
+Videofiles are indicated by their pathname
+
+================= HOT KEYS ================
+ESC - quit
+p   - pause
+o   - hide
+l   - help
+w,e - mhi duration down,up
+s,d - max time delta down,up
+x,c - min time delta down,up
+t,y - prediction down,up
+g,h - difference down,up
+b,n - motion threshold down,up
+f,r - max area down,up
+
+=================== OSC ===================
+
+OSC messages it understands:
+
+    /motiontrack/info -- get info on current parameters
+
+    /motiontrack/mhidur       -f- motion history duration (seconds)
+    /motiontrack/maxdelta     -f- max delta time (seconds)
+    /motiontrack/mindelta     -f- min delta time (seconds)
+    /motiontrack/prediction   -f- portion of rectangle to predict position
+    /motiontrack/threshold    -f- motion threshold (fraction of frame area)
+    /motiontrack/difference   -i- difference threshold (integer)
+    /motiontrack/maxarea      -i- minimum size of area to be tracked (integer) (max area ignored? I should probably rename this parameter)
+
+    /motiontrack/subscribe            -i- subscribe to all data
+    /motiontrack/subscribe/position   -i- subscribe to position
+    /motiontrack/subscribe/direction  -i- subscribe to direction
+    /motiontrack/subscribe/rectangle  -i- subscribe to rectangle
+    /motiontrack/subscribe/prediction -i- subscribe to predicted
+
+    /motiontrack/hide         -i- hide the visual indication of tracked items
+    /motiontrack/hidecamera   -i- do not update the direct camera output
+
+    /motiontrack/pause  -i- pause tracking
+    /motiontrack/quit   -- quit application
+
+OSC messages it sends:
+    All the parameter messages (as confirmation of setting and in reply to info)
+
+	/motiontrackosc/started     --    application has started
+
+    /motiontrack/position   -iff-   id, center x, center y,
+    /motiontrack/direction  -ifff-  id, dir x, dir y, angle
+    /motiontrack/rectangle  -iffff- id, corner 1 x, corner 1 y, corner 2 x, corner 2 y
+    /motiontrack/predicted -iff-   id, predicted x, predicted y
+	/motiontrack/framedone -i-     number of valid areas found
+
+    /motiontrackosc/quit     -s-    application has quit
+
+All coordinates are send as floats between 0 and 1 (i.e. they are automatically
+ scaled to the used capture size.
+
+=========== SuperCollider ========
+
+MotionTrackOSC is distributed with two classes for SuperCollider; one which implements the OSC interface and makes the data usable in SC. The other allows for some further processing of the data.
+Look in the help files to see how it works.
+
+============ ChangeLog ===========
+
+17/03/2009 - v0.2a - added missing SuperCollider classes and some documentation updates
+16/03/2009 - v0.2 - additional parameters, extra SuperCollider class.
+				- this version has been used in the Chronotopia (with Attakkalari Centre for Movement, Bangalore) production.
+06/01/2009 - v0.1 - first release
+
+============ Acknowledgement ==============
+
+This software was created while working on the "Sense/Stage"-project at Concordia University, Montreal, funded by SSHRC.
+
+============ License ==============
+
+This software is published under the GNU/General Public License, version 3. This license is included in the file COPYING.
+Documentation is published under a Creative Commons Attribution-Share Alike 3.0 Unported License, see http://creativecommons.org/licenses/by-sa/3.0/
+
+============ Notes =================
+
+[1] From Jochen Otto, Sept. 19, 2009
+
+The changes in OS X 10.6 basically broke OpenCV's Quicktime/Carbon GUI  
+functionality.
+
+There is a workaround which allows building OpenCV on 64bit  
+architecture, however, without any QT/Carbon support.
+
+See here on the issue:
+http://trac.macports.org/ticket/21014
+http://tech.groups.yahoo.com/group/OpenCV/message/65895
+
+A ticket is filed at OpenCV on Sourceforge, too: http://sourceforge.net/tracker/?func=detail&aid=2859071&group_id=22870&atid=376677
