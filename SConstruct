@@ -63,7 +63,7 @@ print "\n=============== " + PACKAGE + ' v' + VERSION + " ================="
 print "=========== (c) 2009 - Marije Baalman ============== "
 print "=========== www.nescivi.nl/motiontrackosc ==========\n"
 # Read options from the commandline
-opts = Options(None, ARGUMENTS)
+opts = Variables(None, ARGUMENTS)
 opts.AddVariables(
     PathVariable('PREFIX', 'Set the installation directory', '/usr/local'),
     BoolVariable('SC', 'Install SC class', False),
@@ -109,7 +109,7 @@ env.ParseConfig('pkg-config --cflags --libs opencv')
 
 env = conf.Finish()
 
-prog = env.Program('motiontrackosc', 'motiontrackosc.c')
+prog = env.Program('motiontrackosc', 'src/motiontrackosc.c')
 
 BIN_DIR = env['PREFIX'] + "/bin"
 
