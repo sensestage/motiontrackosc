@@ -71,11 +71,12 @@ opts.AddVariables(
 )
 
 env = Environment(options = opts,
-		ENV     = createEnvironment('PATH', 'PKG_CONFIG_PATH'),
-		PACKAGE = PACKAGE,
-		VERSION = VERSION,
-		URL     = 'http://www.nescivi.nl/motiontrackosc',
-		TARBALL = PACKAGE + '.' + VERSION + '.tbz2'
+		ENV       = createEnvironment('PATH', 'PKG_CONFIG_PATH'),
+		PACKAGE   = PACKAGE,
+		VERSION   = VERSION,
+		URL       = 'http://www.nescivi.nl/motiontrackosc',
+		TARBALL   = PACKAGE + '.' + VERSION + '.tbz2',
+		LINKFLAGS = '-lm'
 		)
 
 # Help
